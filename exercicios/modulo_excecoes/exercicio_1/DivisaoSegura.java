@@ -17,7 +17,7 @@ public class DivisaoSegura {
       double resultado = Integer.parseInt(num1) / Integer.parseInt(num2);
       System.out.println("Resultado da divisão: " + resultado);
     } catch (ArithmeticException e) {
-      System.out.println("Não é possível realizar uma divisão por zero"5);
+      System.out.println("Não é possível realizar uma divisão por zero");
     } catch(NumberFormatException e) {
       System.out.println("Erro de formato numérico: " + e.getMessage());
     } 

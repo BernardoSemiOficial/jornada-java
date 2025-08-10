@@ -3,6 +3,12 @@ package busca_ordenacao;
 public class SelectionSort {
   
   public static void main(String[] args) {
+    /*
+     * Selection Sort é um algoritmo de ordenação que divide a lista em duas partes:
+     * a parte ordenada e a parte não ordenada. Ele repetidamente seleciona o menor
+     * (ou maior, dependendo da ordem desejada) elemento da parte não ordenada e o
+     * move para o final da parte ordenada.
+     */
     int[] numeros = {64, 34, 25, 12, 22, 11, 90};
     
     System.out.println("Array original:");

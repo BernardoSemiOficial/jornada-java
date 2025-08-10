@@ -1,0 +1,9 @@
+version: "3"
+services:
+  tomcat:
+    image: tomcat:10
+    container_name: demo-servlet
+    ports:
+      - "8082:8080"
+    volumes:
+      - ./target:/usr/local/tomcat/webapps

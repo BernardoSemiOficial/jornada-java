@@ -1,0 +1,11 @@
+CREATE TABLE COURSES(
+  id UUID PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  description VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  -- Foreign key to USERS table
+  instructor_id UUID NOT NULL,
+  FOREIGN KEY (instructor_id) REFERENCES USERS(id)
+)

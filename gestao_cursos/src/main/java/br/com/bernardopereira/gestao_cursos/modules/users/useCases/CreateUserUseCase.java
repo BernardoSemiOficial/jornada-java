@@ -22,7 +22,7 @@ public class CreateUserUseCase {
   @Autowired
   SecurityConfig securityConfig;
 
-  public String execute(CreateUserRequest user) {
+  public String execute(CreateUserRequest user) throws ValidationException {
     // Verificar dados obrigatórios
     if(user.getName() == null || user.getEmail() == null || user.getPassword() == null || user.getPassword() == null) {
       throw new ValidationException("Preencher campos obrigatórios");

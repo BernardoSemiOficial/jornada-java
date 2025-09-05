@@ -1,5 +1,7 @@
 package br.com.bernardopereira.gestao_cursos.modules.courses.useCases;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,20 +20,20 @@ public class CreateCourseUseCase {
   @Autowired
   private UserRepository userRepository;
 
-  public String execute(CreateCourseRequest course) throws ValidationException {
+  public String execute(CreateCourseRequest course, UUID instructorId) throws ValidationException {
 
-    if(!this.userRepository.existsById(course.getInstructorId())) {
+    if(!this.userRepository.existsById(instructorId)) {
       throw new ValidationException("O instrutor informado não existe.");
     }
 
-    if(course.getTitle() == null || course.getTitle().isEmpty() || course.getDescription() == null || course.getDescription().isEmpty() || course.getInstructorId() == null) {
+    if(course.getTitle() == null || course.getTitle().isEmpty() || course.getDescription() == null || course.getDescription().isEmpty() || instructorId == null) {
       throw new ValidationException("O título, descrição e instrutor são obrigatórios.");
     }
 
     CourseEntity createCourse = CourseEntity.builder()
       .title(course.getTitle())
       .description(course.getDescription())
-      .instructorId(course.getInstructorId())
+      .instructorId(instructorId)
       .build();
 
     CourseEntity response = this.coursesRepository.save(createCourse);

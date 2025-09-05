@@ -3,6 +3,8 @@ package br.com.bernardopereira.gestao_cursos.modules.auth.useCases;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.crypto.SecretKey;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.bernardopereira.gestao_cursos.config.security.SecurityConfig;
 import br.com.bernardopereira.gestao_cursos.modules.auth.dto.UserAuthRequest;
+import br.com.bernardopereira.gestao_cursos.modules.auth.dto.UserAuthResponse;
 import br.com.bernardopereira.gestao_cursos.modules.users.UserRepository;
 import br.com.bernardopereira.gestao_cursos.modules.users.entities.UserEntity;
 import br.com.bernardopereira.gestao_cursos.modules.users.entities.UserRole;
@@ -28,7 +31,7 @@ public class UserAuthUseCase {
   @Autowired
   private SecurityConfig securityConfig;
 
-  public String execute(UserAuthRequest userAuthRequest) {
+  public UserAuthResponse execute(UserAuthRequest userAuthRequest, UserRole userRole) {
     /*
      * TODO: Implementar lógica de autenticação de usuário
      * Verificar se o usuário existe
@@ -41,7 +44,7 @@ public class UserAuthUseCase {
       throw new UsernameNotFoundException("Usuário ou senha inválidos");
     }
 
-    if(!user.get().getRole().equals(UserRole.TEACHER)) {
+    if(!user.get().getRole().equals(userRole)) {
       throw new UsernameNotFoundException("Usuário ou senha inválidos");
     }
 
@@ -58,14 +61,23 @@ public class UserAuthUseCase {
 
     SecretKey key = Keys.hmacShaKeyFor("@SECRET_KEY_MANAGE_COURSES_SECRET_KEY@".getBytes());
     
+    Map<String, String> claims = new HashMap<>();
+    claims.put("role", userRole.toString());
+
     String token = Jwts.builder()
       .subject(user.get().getId().toString())
       .issuer("GESTAO_CURSOS")
       .issuedAt(Date.from(now))
       .expiration(Date.from(expiration))
+      .claims(claims)
       .signWith(key)
       .compact();
 
-    return token;
+    UserAuthResponse response = UserAuthResponse.builder()
+      .access_token(token)
+      .created_at(Date.from(now))
+      .expires_in(Date.from(expiration)).build();
+
+    return response;
   }
 }
